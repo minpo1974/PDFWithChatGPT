@@ -10,9 +10,12 @@ from langchain.vectorstores import Chroma
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
 import os
+from streamlit_extras.buy_me_a_coffee import button 
 
 # Streamlit 인터페이스 설정
 st.title("PDF Service with ChatGPT")
+
+button(username="minpo", floating=True, width=221)
 
 # 파일 업로드
 uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
