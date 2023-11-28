@@ -1,10 +1,8 @@
-'''
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 #requires.txt에 pysqlite3-binary 추가
-'''
 
 import streamlit as st
 from langchain.document_loaders import PyPDFLoader
