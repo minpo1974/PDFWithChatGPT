@@ -48,7 +48,7 @@ if st.button("Process"):
         db = Chroma.from_documents(split_pages, embeddings_model)
 
         # 질의 및 검색
-        llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
+        llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, max_tokens=4096)
         qa_chain = RetrievalQA.from_chain_type(llm, retriever=db.as_retriever())
         result = qa_chain({"query": question })
 
