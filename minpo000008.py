@@ -1,9 +1,3 @@
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
-#requires.txt에 pysqlite3-binary 추가
-
 import streamlit as st
 from langchain.document_loaders import PyPDFLoader
 from langchain.text_splitter import CharacterTextSplitter
@@ -30,10 +24,8 @@ if st.button("Process"):
         with open(uploaded_file.name, "wb") as f:
             f.write(uploaded_file.getbuffer())
 
+        # PDF 로더 및 텍스트 분리 설정
         loader = PyPDFLoader(uploaded_file.name)
-        pages = loader.load()
-        
-        # 텍스트 분리
         text_splitter = CharacterTextSplitter(
             separator="\n\n",
             chunk_size=1000,
@@ -41,11 +33,13 @@ if st.button("Process"):
             length_function=len,
             is_separator_regex=False,
         )
-        split_pages = text_splitter.split_documents(pages)
+
+        # PDF 문서 로드 및 분리
+        pages = text_splitter.split_documents(loader.load())
 
         # 임베딩과 Chroma
         embeddings_model = OpenAIEmbeddings()
-        db = Chroma.from_documents(split_pages, embeddings_model)
+        db = Chroma.from_documents(pages, embeddings_model)
 
         # 질의 및 검색
         llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, max_tokens=4096)
